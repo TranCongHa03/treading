@@ -11,4 +11,9 @@ public class HomeController {
         return "welcome to treading platform";
     }
 
+    @GetMapping("/api")
+    public String secure() {
+        return "welcome to treading platform Secure";
+    }
+
 }
