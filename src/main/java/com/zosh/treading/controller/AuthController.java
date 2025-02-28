@@ -1,9 +1,6 @@
 package com.zosh.treading.controller;
 
-import java.net.Authenticator;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,8 +17,6 @@ import com.zosh.treading.entity.User;
 import com.zosh.treading.repository.UserRepository;
 import com.zosh.treading.response.AuthResponse;
 import com.zosh.treading.service.CustomeUserDetailsService;
-
-import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
