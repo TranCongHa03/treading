@@ -58,14 +58,31 @@ public class AuthController {
         authResponse.setJwt(jwt);
         authResponse.setStatus(true);
         authResponse.setMessage("User registered successfully");
-        
-
-
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 
-    private UsernamePasswordAuthenticationToken authenticate(String usserName, String password) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(usserName);
+    @PostMapping("/signin")
+    public ResponseEntity<AuthResponse> login(@RequestBody User user) throws Exception {
+            
+        String userName = user.getEmail();
+        String password = user.getPassword();
+
+        org.springframework.security.core.Authentication auth = authenticate(userName, password);
+                    
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        String jwt = JwtProvider.generateToken(auth);
+
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setJwt(jwt);
+        authResponse.setStatus(true);
+        authResponse.setMessage("User login successfully");
+        return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
+    }
+
+
+    private UsernamePasswordAuthenticationToken authenticate(String userName, String password) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
         if(userDetails == null){
             throw new BadCredentialsException("User not found");
