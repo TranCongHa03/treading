@@ -12,11 +12,11 @@ public interface CoinService {
 
     String getCoinDetails(String coinId) throws Exception;
 
-    Coin findById(String coinId);
+    Coin findById(String coinId) throws Exception;
 
-    String searchCoin(String keyword);
+    String searchCoin(String keyword) throws Exception;
 
-    String getTop50CoinsByMarketCapRank();
+    String getTop50CoinsByMarketCapRank() throws Exception;
 
-    String GetTreadingCoins();
+    String GetTreadingCoins() throws Exception;
 }

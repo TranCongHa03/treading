@@ -1,6 +1,7 @@
 package com.zosh.treading.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -51,7 +52,7 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public String getMarketChart(String coinId, int days) throws Exception {
-        String url = "https://api.coingecko.com/api/v3/coins/"+coinId+"/market_chart?vs_curenty=usd&days=" + days;
+        String url = "https://api.coingecko.com/api/v3/coins/" + coinId + "/market_chart?vs_curenty=usd&days=" + days;
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -62,7 +63,6 @@ public class CoinServiceImpl implements CoinService {
 
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
-            
             return response.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             throw new Exception(e.getMessage());
@@ -71,8 +71,8 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public String getCoinDetails(String coinId) throws Exception {
-        String url = "https://api.coingecko.com/api/v3/coins/"+coinId;
-        
+        String url = "https://api.coingecko.com/api/v3/coins/" + coinId;
+
         RestTemplate restTemplate = new RestTemplate();
 
         try {
@@ -108,27 +108,68 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public Coin findById(String coinId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    public Coin findById(String coinId) throws Exception {
+        Optional<Coin> optionalCoin = coinRepository.findById(coinId);
+        if (optionalCoin.isEmpty())
+            throw new Exception("Coin not found");
+        return optionalCoin.get();
     }
 
     @Override
-    public String searchCoin(String keyword) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchCoin'");
+    public String searchCoin(String keyword) throws Exception {
+        String url = "https://api.coingecko.com/api/v3/search?query=" + keyword;
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+
+            HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
-    public String getTop50CoinsByMarketCapRank() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTop50CoinsByMarketCapRank'");
+    public String getTop50CoinsByMarketCapRank() throws Exception {
+        String url = "https://api.coingecko.com/api/v3/coins/markets/vs_curenty=usd&per_page=50&page=1";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+
+            HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
-    public String GetTreadingCoins() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'GetTreadingCoins'");
+    public String GetTreadingCoins() throws Exception {
+        String url = "https://api.coingecko.com/api/v3/search/treading";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+
+            HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
 }
