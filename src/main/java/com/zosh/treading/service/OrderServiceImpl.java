@@ -98,20 +98,31 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setOrder(order);
         if(assetToSell.getQuantity()>= quantity){
 
+            order.setStatus(OrderStatus.SUCCESS);
+            order.setOrderType(OrderType.SELL);
+            Order savedOrder = orderRepository.save(order);
+
             walletService.payOrderPayment(order, user);
             Asset updateAsset = assetService.updateAsset(assetToSell.getId(),-quantity);
-            if(updateAsset.getQuantity()*coin.get)
+            if(updateAsset.getQuantity()*coin.getCurrentPrice()<=1){
+                assetService.deleteAsset(updateAsset.getId);
+            }
+            return savedOrder;
         }
-        order.setStatus(OrderStatus.SUCCESS);
-        order.setOrderType(OrderType.SELL);
-        Order savedOrder = orderRepository.save(order);
+        throw new Exception("Insufficient quantity to sell");
+       
 
-        //create asset
-        return savedOrder;
     }
     @Override
-    public Order processOrder(Coin coin, double quantity, OrderType orderType, User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'processOrder'");
+    @Transactional
+    public Order processOrder(Coin coin, double quantity, OrderType orderType, User user) throws Exception {
+      
+        if(orderType.equals(OrderType.BUY)){
+            return buyAsset(coin, quantity, user);
+        }
+        else if(orderType.equals(OrderType.SELL)){
+            return sellAsset(coin, quantity, user);
+        }
+        throw new Exception("invalid order type ");
     }
 }
