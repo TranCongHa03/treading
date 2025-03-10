@@ -15,6 +15,7 @@ import com.zosh.treading.entity.Order;
 import com.zosh.treading.entity.User;
 import com.zosh.treading.entity.Wallet;
 import com.zosh.treading.entity.WalletTransaction;
+import com.zosh.treading.service.OrderService;
 import com.zosh.treading.service.UserService;
 import com.zosh.treading.service.WalletService;
 
@@ -27,6 +28,9 @@ public class WalletController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/api/wallet")
     public ResponseEntity<Wallet> getUserWallet(@RequestHeader("Authorization") String jwt) throws Exception {
