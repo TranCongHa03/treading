@@ -1,5 +1,7 @@
 package com.zosh.treading.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,5 +41,12 @@ public class AssetController {
         return ResponseEntity.ok().body(asset);
     }
 
-
+    @GetMapping()
+    public ResponseEntity<List<Asset>> getAssetsForUser(
+        @RequestHeader("Authorization") String jwt
+    ) throws Exception{
+        User user =userService.findUserProfileByJwt(jwt);
+        List<Asset> assets = assetService.getUsersAssets(user.getId());
+        return ResponseEntity.ok().body(assets);
+    }
 }
