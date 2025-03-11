@@ -1,5 +1,7 @@
 package com.zosh.treading.service;
 
+import com.razorpay.RazorpayException;
+import com.stripe.exception.StripeException;
 import com.zosh.treading.domain.PaymentMethod;
 import com.zosh.treading.entity.PaymentOrder;
 import com.zosh.treading.entity.User;
@@ -11,9 +13,9 @@ public interface PaymentService {
 
     PaymentOrder getPaymentOrderById(Long id) throws Exception;
 
-    Boolean ProccedPaymentOrder(PaymentOrder paymentOrder, String paymentId);
+    Boolean ProccedPaymentOrder(PaymentOrder paymentOrder, String paymentId) throws Exception;
 
-    PaymentResponse createRazorpayPaymentLing(User user, Long amount);
+    PaymentResponse createRazorpayPaymentLing(User user, Long amount) throws RazorpayException;
 
-    PaymentResponse createStripePaymentLing(User user, Long amount, Long orderId);
+    PaymentResponse createStripePaymentLing(User user, Long amount, Long orderId) throws StripeException;
 }
